@@ -13,14 +13,13 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'HelloWorldWebPartStrings';
 import MockHttpClient from './MockHttpClient';
-import {
-  SPHttpClient,
-  SPHttpClientResponse
-} from '@microsoft/sp-http';
+import { SPHttpClientResponse } from '@microsoft/sp-http';
+import { SPHttpClient } from '@microsoft/sp-http';
+
 import HelloWorld from './components/HelloWorld';
 import { IHelloWorldProps } from './components/IHelloWorldProps';
 
-import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { WebPartContext } from '@microsoft/sp-webpart-base';
 import {
   Environment,
   EnvironmentType
@@ -53,6 +52,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart <IHelloWorl
       }
     );
 
+    this._renderListAsync();
     ReactDom.render(element, this.domElement);
   }
 
@@ -65,7 +65,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart <IHelloWorl
   }
 
   private _getListData(): Promise<ISPLists> {
-    return this.properties.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl + `/_api/web/lists?$filter=Hidden eq false`, SPHttpClient.configurations.v1)
+    return this.context.spHttpClient.get(this.context.pageContext.web.absoluteUrl + `/_api/web/lists?$filter=Hidden eq false`, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
       });
